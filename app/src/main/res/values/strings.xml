@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">GOT</string>
+    <string name="search_char">Search Character</string>
+    <string name="scroll_to_top">Scroll to Top</string>
+    <string name="about_name">Muhammad Cakra Pandu Kusuma</string>
+    <string name="about_email">cakrapand@gmail.com</string>
+    <string name="about_me">About Me</string>
 </resources>

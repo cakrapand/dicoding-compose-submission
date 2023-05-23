@@ -1,11 +1,76 @@
 package com.example.got
 
+import android.util.Log
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Devices
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.example.got.ui.components.DetailContent
+import com.example.got.ui.components.FavoriteContent
+import com.example.got.ui.navigation.Screen
+import com.example.got.ui.screen.about.AboutScreen
+import com.example.got.ui.screen.detail.DetailScreen
+import com.example.got.ui.screen.favorite.FavoriteScreen
+import com.example.got.ui.screen.home.HomeScreen
+import com.example.got.ui.theme.GOTTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GotApp(
     modifier: Modifier = Modifier,
-){
-
+    navController: NavHostController = rememberNavController(),
+) {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+    NavHost(
+        navController = navController,
+        startDestination = Screen.Home.route,
+        modifier = Modifier
+    ){
+        composable(Screen.Home.route){
+            HomeScreen(
+                navigateToAbout = { navController.navigate(Screen.About.route) },
+                navigateToDetail = { id -> navController.navigate(Screen.Detail.createRoute(id)) },
+                navigateToFavorite = {navController.navigate(Screen.Favorite.route)},
+            )
+        }
+        composable(Screen.About.route){
+            AboutScreen()
+        }
+        composable(Screen.Favorite.route){
+            FavoriteScreen( navigateToDetail = { id -> navController.navigate(Screen.Detail.createRoute(id)) })
+        }
+        composable(
+            route = Screen.Detail.route,
+            arguments = listOf(navArgument("id"){type = NavType.LongType})
+        ){
+            val id = it.arguments?.getLong("id") ?: -1L
+            DetailScreen(id = id, navigateBack = {navController.navigateUp()})
+        }
+    }
 }
+
+@Preview(showBackground = true, device = Devices.PIXEL_4)
+@Composable
+fun GotAppPreview() {
+    GOTTheme {
+        GotApp()
+    }
+}
+
