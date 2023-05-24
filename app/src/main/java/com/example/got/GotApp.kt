@@ -5,11 +5,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,6 +34,7 @@ import com.example.got.ui.screen.detail.DetailScreen
 import com.example.got.ui.screen.favorite.FavoriteScreen
 import com.example.got.ui.screen.home.HomeScreen
 import com.example.got.ui.theme.GOTTheme
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,34 +42,49 @@ fun GotApp(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
 ) {
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
-    NavHost(
-        navController = navController,
-        startDestination = Screen.Home.route,
-        modifier = Modifier
-    ){
-        composable(Screen.Home.route){
-            HomeScreen(
-                navigateToAbout = { navController.navigate(Screen.About.route) },
-                navigateToDetail = { id -> navController.navigate(Screen.Detail.createRoute(id)) },
-                navigateToFavorite = {navController.navigate(Screen.Favorite.route)},
-            )
-        }
-        composable(Screen.About.route){
-            AboutScreen()
-        }
-        composable(Screen.Favorite.route){
-            FavoriteScreen( navigateToDetail = { id -> navController.navigate(Screen.Detail.createRoute(id)) })
-        }
-        composable(
-            route = Screen.Detail.route,
-            arguments = listOf(navArgument("id"){type = NavType.LongType})
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
+    Scaffold(
+        modifier = modifier,
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+    ){ paddingValues ->
+
+        NavHost(
+            navController = navController,
+            startDestination = Screen.Home.route,
+            modifier = Modifier.padding(paddingValues)
         ){
-            val id = it.arguments?.getLong("id") ?: -1L
-            DetailScreen(id = id, navigateBack = {navController.navigateUp()})
+            composable(Screen.Home.route){
+                HomeScreen(
+                    navigateToAbout = { navController.navigate(Screen.About.route) },
+                    navigateToDetail = { id -> navController.navigate(Screen.Detail.createRoute(id)) },
+                    navigateToFavorite = {navController.navigate(Screen.Favorite.route)},
+                )
+            }
+            composable(Screen.About.route){
+                AboutScreen(navigateBack = { navController.navigateUp() })
+            }
+            composable(Screen.Favorite.route){
+                FavoriteScreen(
+                    navigateToDetail = { id -> navController.navigate(Screen.Detail.createRoute(id)) },
+                    navigateBack = { navController.navigateUp() }
+                )
+            }
+            composable(
+                route = Screen.Detail.route,
+                arguments = listOf(navArgument("id"){type = NavType.LongType})
+            ){
+                val id = it.arguments?.getLong("id") ?: -1L
+                DetailScreen(
+                    id = id,
+                    showSnackbar = {message -> scope.launch { snackbarHostState.showSnackbar(message = message) }},
+                    navigateBack = { navController.navigateUp() }
+                )
+            }
         }
     }
+
 }
 
 @Preview(showBackground = true, device = Devices.PIXEL_4)

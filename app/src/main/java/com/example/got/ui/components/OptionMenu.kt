@@ -8,6 +8,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.got.ui.theme.GOTTheme
@@ -20,19 +21,19 @@ fun OptionMenu(
 ) {
     Row(modifier = modifier) {
         IconButton(onClick = navigateToFavorite) {
-            Icon(Icons.Default.Favorite, "Favorite Character")
+            Icon(
+                imageVector = Icons.Default.Favorite,
+                tint = Color.White,
+                contentDescription = "favorite_page"
+            )
         }
 
         IconButton(onClick = navigateToAbout) {
-            Icon(Icons.Default.Person, "about_page")
+            Icon(
+                imageVector = Icons.Default.Person,
+                tint = Color.White,
+                contentDescription = "about_page"
+            )
         }
-    }
-}
-
-@Preview(showBackground = true, device = Devices.PIXEL_4)
-@Composable
-fun OptionMenuPreview() {
-    GOTTheme {
-        OptionMenu(navigateToAbout = {}, navigateToFavorite = {})
     }
 }

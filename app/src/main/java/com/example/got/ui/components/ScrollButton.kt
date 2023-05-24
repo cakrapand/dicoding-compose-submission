@@ -27,9 +27,7 @@ fun ScrollToTopButton(
     Button(
         onClick = onClick,
         modifier = modifier
-            .shadow(10.dp, shape = CircleShape)
-            .clip(shape = CircleShape)
-            .size(56.dp),
+            .shadow(10.dp, shape = CircleShape),
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.White,
             contentColor = MaterialTheme.colorScheme.primary

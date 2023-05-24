@@ -13,23 +13,28 @@ import kotlinx.coroutines.launch
 
 class DetailViewModel(private val repository: Repository) : ViewModel() {
 
-    private val _characterDetail: MutableStateFlow<UiState<Character>> = MutableStateFlow(UiState.Loading)
-    val characterDetail: StateFlow<UiState<Character>>
+    private val _characterDetail: MutableStateFlow<UiState<DetailState>> = MutableStateFlow(UiState.Loading)
+    val characterDetail: StateFlow<UiState<DetailState>>
         get() = _characterDetail
 
 //    private val _isFavorite = MutableLiveData<Boolean>()
 //    val isFavorite: LiveData<Boolean>
 //        get() = _isFavorite
 
-    var _isFavorite = false
+//    private val _isFavorite: MutableStateFlow<UiState<Boolean>> = MutableStateFlow(UiState.Loading)
+//    val isFavorite: StateFlow<UiState<Boolean>>
+//        get() = _isFavorite
+
+//    private val _isFavorite: MutableStateFlow<Boolean> = MutableStateFlow(false)
+//    val isFavorite: StateFlow<Boolean>
+//        get() = _isFavorite
 
 
     fun getCharacterById(id: Long){
         viewModelScope.launch {
             repository.getFavoriteCharById(id).collect{
                 _characterDetail.value = UiState.Loading
-                _isFavorite = it != null
-                _characterDetail.value = UiState.Success(repository.getCharacterById(id))
+                _characterDetail.value = UiState.Success(DetailState(repository.getCharacterById(id), it!=null))
             }
         }
     }

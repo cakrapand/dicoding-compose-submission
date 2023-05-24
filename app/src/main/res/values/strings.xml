@@ -5,4 +5,12 @@
     <string name="about_name">Muhammad Cakra Pandu Kusuma</string>
     <string name="about_email">cakrapand@gmail.com</string>
     <string name="about_me">About Me</string>
+    <string name="empty">Data is empty</string>
+    <string name="name">Name\n%s</string>
+    <string name="alias">Alias\n%s</string>
+    <string name="cast">Cast\n%s</string>
+    <string name="gender">Gender\n%s</string>
+    <string name="house">House\n%s</string>
+    <string name="navigation_back">Navigation Back</string>
+
 </resources>
