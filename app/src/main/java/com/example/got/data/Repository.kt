@@ -1,14 +1,9 @@
 package com.example.got.data
 
-import android.util.Log
-import androidx.lifecycle.LiveData
 import com.example.got.data.local.room.FavoriteDao
 import com.example.got.model.Character
 import com.example.got.model.FakeDataSource
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.flow
-import org.w3c.dom.Entity
 
 class Repository private constructor(private val favoriteDao: FavoriteDao){
 

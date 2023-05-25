@@ -7,10 +7,9 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.printToLog
+import com.example.got.R
 import com.example.got.model.FakeDataSource
 import com.example.got.ui.theme.GOTTheme
-import com.example.got.R
-import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

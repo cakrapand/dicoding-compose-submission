@@ -8,7 +8,6 @@ import com.example.got.di.Injection
 import com.example.got.ui.ViewModelFactory
 import com.example.got.ui.common.UiState
 import com.example.got.ui.components.DetailContent
-import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun DetailScreen(
